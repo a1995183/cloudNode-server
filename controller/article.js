@@ -30,9 +30,14 @@ next(err)
 
 })
 router.get('/article',(req,res)=>{
-    let{pn=1,size=10}=req.query
+    let{pn=1,size=10,author}=req.query
+    let  total='';
+    console.log(author)
     pn=parseInt(pn)
     size=parseInt(size)
+    articleModel.find().count().then(data=>{
+     total=data
+})
     articleModel.find()
     .skip((pn-1)*size)
     .limit(size)
@@ -47,7 +52,8 @@ router.get('/article',(req,res)=>{
     .then(data=>{
         res.json({
             code:200,
-            data
+            data,
+            total
         })
     })
 })

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const comments=new mongoose.Schema({
-    article:{
-        type:Schema.Types.ObjectId,
-        ref:'article'
+    auid:{
+        type:String
+        // type:Schema.Types.ObjectId,
+        // ref:'article'
     },
     content:{
         type:String,
@@ -11,6 +12,7 @@ const comments=new mongoose.Schema({
     user:{
         type:Schema.Types.ObjectId,
         ref:'user'
-    }
+    },
+    replayName:String
 },{varsionKey:false,timestamps:{createdAt:'createdTime',updatedAt:'updatedTime'}})
 module.exports=mongoose.model('comments',comments);

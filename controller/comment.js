@@ -2,11 +2,11 @@ const {Router}=require("express")
 const router=Router()
 const Comment=require('../model/comment')
 router.post('/addComment',async (req,res,next)=>{
-    const {article,content,user}=req.body;
+    const {auid,content,user,replayName}=req.body;
     if(user){
         try{
             if(content!=null){
-                const data=Comment.create({article,content,user})
+                const data=Comment.create({auid,content,user,replayName})
                 res.json({
                     code:"200",
                     msg:'评论发表成功'
@@ -34,8 +34,15 @@ router.post('/addComment',async (req,res,next)=>{
 
 })
 router.get('/getComment',(req,res,next)=>{
-const {page=1,pageSize=110}=req.query
-Comment.find()
+const {pn=1,size=10,auid=""}=req.query
+let total='';
+Comment.find().count().then(data=>{
+    total=data
+})
+Comment.find({auid})
+.skip((pn-1)*size)
+.limit(size)
+.sort({_id:1})
 .populate({
     path:'user',
     select:'-password -email'
@@ -48,6 +55,7 @@ Comment.find()
     res.json({
         code:200,
         msg:'success',
+        total,
         data
     })
 })

@@ -2,9 +2,14 @@ const {Router}=require("express")
 const router=Router()
 const categoryModel=require('../model/category')
 router.get('/category',(rq,res)=>{
+    let total='';
+    categoryModel.find().count().then(data=>{
+        total=data;
+    })
     categoryModel.find().then(data=>{
         res.json({
             code:200,
+            total,
             data
         })
     })
